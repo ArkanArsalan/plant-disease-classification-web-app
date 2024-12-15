@@ -12,18 +12,18 @@ IMAGE_SIZE = (224, 224)
 
 # List of class labels
 CLASS_LABELS = [
-    "Apple___Apple_scab", "Apple___Black_rot", "Apple___Cedar_apple_rust", "Apple___healthy",
-    "Blueberry___healthy", "Cherry_(including_sour)___Powdery_mildew", "Cherry_(including_sour)___healthy",
-    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot", "Corn_(maize)___Common_rust_",
-    "Corn_(maize)___Northern_Leaf_Blight", "Corn_(maize)___healthy", "Grape___Black_rot",
-    "Grape___Esca_(Black_Measles)", "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)", "Grape___healthy",
-    "Orange___Haunglongbing_(Citrus_greening)", "Peach___Bacterial_spot", "Peach___healthy",
-    "Pepper,_bell___Bacterial_spot", "Pepper,_bell___healthy", "Potato___Early_blight", "Potato___Late_blight",
-    "Potato___healthy", "Raspberry___healthy", "Soybean___healthy", "Squash___Powdery_mildew",
-    "Strawberry___Leaf_scorch", "Strawberry___healthy", "Tomato___Bacterial_spot", "Tomato___Early_blight",
-    "Tomato___Late_blight", "Tomato___Leaf_Mold", "Tomato___Septoria_leaf_spot",
-    "Tomato___Spider_mites Two-spotted_spider_mite", "Tomato___Target_Spot",
-    "Tomato___Tomato_Yellow_Leaf_Curl_Virus", "Tomato___Tomato_mosaic_virus", "Tomato___healthy"
+    "Apple Apple scab", "Apple Black rot", "Apple Cedar apple rust", "Apple healthy",
+    "Blueberry healthy", "Cherry (including sour) Powdery mildew", "Cherry (including sour) healthy",
+    "Corn (maize) Cercospora-leaf-spot Gray-leaf-spot," "Corn (maize) Common rust",
+    "Corn (maize) Northern Leaf Blight", "Corn (maize) healthy", "Grape Black rot",
+    "Grape Esca (Black Measles)", "Grape Leaf blight (Isariopsis Leaf Spot)", "Grape healthy",
+    "Orange Haunglongbing (Citrus greening)", "Peach Bacterial spot", "Peach healthy",
+    "Pepper, bell Bacterial spot", "Pepper, bell healthy", "Potato Early blight", "Potato Late blight",
+    "Potato healthy", "Raspberry healthy", "Soybean healthy", "Squash Powdery mildew",
+    "Strawberry Leaf scorch", "Strawberry healthy", "Tomato Bacterial spot", "Tomato Early blight",
+    "Tomato Late blight", "Tomato Leaf Mold", "Tomato Septoria leaf spot",
+    "Tomato Spider mites Two-spotted spider mite", "Tomato Target Spot",
+    "Tomato Tomato Yellow Leaf Curl Virus", "Tomato Tomato mosaic virus", "Tomato healthy"
 ]
 
 # Initialize Flask app
@@ -40,21 +40,17 @@ def predict():
 
     file = request.files['image']
     try:
-        # Load and preprocess the image
         image = Image.open(file).convert('RGB')
         image = image.resize(IMAGE_SIZE)
-        image = np.array(image) / 255.0  # Normalize to [0, 1]
-        image = np.expand_dims(image, axis=0)  # Add batch dimension
+        image = np.array(image) / 255.0
+        image = np.expand_dims(image, axis=0)
 
-        # Perform prediction
         predictions = model.predict(image)
         predicted_class_idx = np.argmax(predictions, axis=-1)[0]
         confidence = np.max(predictions)
 
-        # Map index to class label
         predicted_class_label = CLASS_LABELS[predicted_class_idx]
 
-        # Return result
         return jsonify({
             'predicted_class': predicted_class_label,
             'confidence': float(confidence)
