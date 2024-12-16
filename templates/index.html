@@ -6,7 +6,7 @@
     <title>Plant Disease Classification</title>
     <style>
       body {
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Montserrat", sans-serif;
         margin: 0;
         padding: 0;
         display: flex;
@@ -14,12 +14,12 @@
         align-items: center;
         justify-content: flex-start;
         height: 100vh;
-        background: linear-gradient(to right, #155e19, #49904C);
-      }  
+        background: linear-gradient(to right, #155e19, #49904c);
+      }
 
       nav {
         width: 100%;
-        background: linear-gradient(to right, #155e19, #49904C);
+        background: linear-gradient(to right, #155e19, #49904c);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -108,7 +108,7 @@
         text-align: center;
         text-transform: uppercase;
       }
-      
+
       h1 .classification {
         display: block;
         font-size: 22px;
@@ -125,7 +125,7 @@
         text-align: center;
         line-height: 1.5;
       }
-      
+
       form {
         background: #fff;
         padding: 20px;
@@ -222,10 +222,7 @@
   </head>
   <body>
     <nav>
-      <div class="brand">
-        <img src="logo.png" alt="Logo" />
-        Your Brand
-      </div>
+      <div class="brand">Plant Disease Classification</div>
       <ul>
         <li><a href="#">Home</a></li>
         <li><a href="#">Service</a></li>
@@ -234,11 +231,13 @@
       </ul>
     </nav>
 
-    <h1>Plant Disease
+    <h1>
+      Plant Disease
       <span class="classification">Classification</span>
     </h1>
     <p class="description">
-      Identify and analyze plant diseases with precision <br /> to ensure healthier crops and sustainable farming.
+      Identify and analyze plant diseases with precision <br />
+      to ensure healthier crops and sustainable farming.
     </p>
     <form id="uploadForm">
       <button type="button" id="refreshButton">Refresh</button>
@@ -247,11 +246,18 @@
     </form>
     <div id="result">
       <div class="result-content">
-        <img id="uploadedImage" src="" alt="Uploaded Image" style="display:none;" />
+        <img
+          id="uploadedImage"
+          src=""
+          alt="Uploaded Image"
+          style="display: none"
+        />
         <div class="result-text">
           <h2>Prediction Result</h2>
           <p><strong>Confidence:</strong> <span id="confidence"></span></p>
-          <p><strong>Possible Disease:</strong> <span id="predictedClass"></span></p>
+          <p>
+            <strong>Possible Disease:</strong> <span id="predictedClass"></span>
+          </p>
           <p><strong>Status:</strong> <span id="status"></span></p>
           <p><strong>Treatment:</strong> <span id="possibleDisease"></span></p>
         </div>
@@ -259,15 +265,15 @@
     </div>
 
     <script>
-      const form = document.getElementById('uploadForm');
-      const refreshButton = document.getElementById('refreshButton');
-      const resultDiv = document.getElementById('result');
-      const predictedClassSpan = document.getElementById('predictedClass');
-      const confidenceSpan = document.getElementById('confidence');
-      const statusSpan = document.getElementById('status');
-      const possibleDiseaseSpan = document.getElementById('possibleDisease');
+      const form = document.getElementById("uploadForm");
+      const refreshButton = document.getElementById("refreshButton");
+      const resultDiv = document.getElementById("result");
+      const predictedClassSpan = document.getElementById("predictedClass");
+      const confidenceSpan = document.getElementById("confidence");
+      const statusSpan = document.getElementById("status");
+      const possibleDiseaseSpan = document.getElementById("possibleDisease");
       const fileInput = form.querySelector('input[type="file"]');
-      const uploadedImage = document.getElementById('uploadedImage');
+      const uploadedImage = document.getElementById("uploadedImage");
 
       // Database penyakit
       const diseaseDatabase = {
@@ -275,228 +281,254 @@
         "Apple Apple scab": {
           disease: "Apple scab",
           status: "Diseased",
-          treatment: "- Apply fungicides containing captan or myclobutanil.\n- Prune infected branches and ensure good air circulation.\n- Remove fallen leaves and practice crop rotation."
+          treatment:
+            "- Apply fungicides containing captan or myclobutanil.\n- Prune infected branches and ensure good air circulation.\n- Remove fallen leaves and practice crop rotation.",
         },
         "Apple Black rot": {
-          disease: "Black rot", 
-          status: "Diseased", 
-          treatment: "- Remove infected fruit and branches.\n- Apply copper-based fungicides.\n- Maintain tree pruning and sanitation.\n- Ensure proper spacing for air circulation."
+          disease: "Black rot",
+          status: "Diseased",
+          treatment:
+            "- Remove infected fruit and branches.\n- Apply copper-based fungicides.\n- Maintain tree pruning and sanitation.\n- Ensure proper spacing for air circulation.",
         },
         "Apple Cedar apple rust": {
           disease: "Cedar apple rust",
           status: "Diseased",
-          treatment: "- Remove nearby cedar trees if possible.\n- Apply fungicides containing myclobutanil or chlorothalonil.\n- Prune infected branches and maintain tree health."
+          treatment:
+            "- Remove nearby cedar trees if possible.\n- Apply fungicides containing myclobutanil or chlorothalonil.\n- Prune infected branches and maintain tree health.",
         },
         "Apple healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular maintenance and preventive care."
+          treatment: "- Continue regular maintenance and preventive care.",
         },
 
         // Blueberry
         "Blueberry healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Maintain proper fertilization and pruning."
+          treatment: "- Maintain proper fertilization and pruning.",
         },
 
         // Cherry Diseases
         "Cherry (including sour) Powdery mildew": {
           disease: "Powdery mildew",
           status: "Diseased",
-          treatment: "- Apply sulfur-based fungicides.\n- Improve air circulation by pruning.\n- Avoid overhead watering.\n- Use resistant varieties when possible."
+          treatment:
+            "- Apply sulfur-based fungicides.\n- Improve air circulation by pruning.\n- Avoid overhead watering.\n- Use resistant varieties when possible.",
         },
         "Cherry (including sour) healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular orchard maintenance."
+          treatment: "- Continue regular orchard maintenance.",
         },
 
         // Corn Diseases
         "Corn (maize) Cercospora-leaf-spot Gray-leaf-spot": {
           disease: "Cercospora leaf spot",
           status: "Diseased",
-          treatment: "- Use resistant corn varieties.\n- Apply fungicides containing azoxystrobin.\n- Practice crop rotation.\n- Remove and destroy infected plant debris."
+          treatment:
+            "- Use resistant corn varieties.\n- Apply fungicides containing azoxystrobin.\n- Practice crop rotation.\n- Remove and destroy infected plant debris.",
         },
         "Corn (maize) Common rust": {
           disease: "Common rust",
           status: "Diseased",
-          treatment: "- Plant rust-resistant varieties.\n- Apply fungicides if severe.\n- Remove and destroy infected plants.\n- Ensure proper plant spacing."
+          treatment:
+            "- Plant rust-resistant varieties.\n- Apply fungicides if severe.\n- Remove and destroy infected plants.\n- Ensure proper plant spacing.",
         },
         "Corn (maize) Northern Leaf Blight": {
           disease: "Northern Leaf Blight",
           status: "Diseased",
-          treatment: "- Use resistant corn hybrids.\n- Apply fungicides containing azoxystrobin.\n- Practice crop rotation.\n- Remove infected plant material."
+          treatment:
+            "- Use resistant corn hybrids.\n- Apply fungicides containing azoxystrobin.\n- Practice crop rotation.\n- Remove infected plant material.",
         },
         "Corn (maize) healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular crop management practices."
+          treatment: "- Continue regular crop management practices.",
         },
 
         // Grape Diseases
         "Grape Black rot": {
           disease: "Black rot",
           status: "Diseased",
-          treatment: "- Apply fungicides containing captan or mancozeb.\n- Prune to improve air circulation.\n- Remove infected fruit and leaves.\n- Practice good vineyard sanitation."
+          treatment:
+            "- Apply fungicides containing captan or mancozeb.\n- Prune to improve air circulation.\n- Remove infected fruit and leaves.\n- Practice good vineyard sanitation.",
         },
         "Grape Esca (Black Measles)": {
           disease: "Esca (Black Measles)",
           status: "Diseased",
-          treatment: "- Prune during dry weather.\n- Apply protective fungicides.\n- Remove and destroy severely infected vines.\n- Ensure proper vineyard hygiene."
+          treatment:
+            "- Prune during dry weather.\n- Apply protective fungicides.\n- Remove and destroy severely infected vines.\n- Ensure proper vineyard hygiene.",
         },
         "Grape Leaf blight (Isariopsis Leaf Spot)": {
           disease: "Leaf blight",
           status: "Diseased",
-          treatment: "- Apply copper-based fungicides.\n- Improve air circulation through pruning.\n- Remove infected leaves.\n- Practice crop rotation."
+          treatment:
+            "- Apply copper-based fungicides.\n- Improve air circulation through pruning.\n- Remove infected leaves.\n- Practice crop rotation.",
         },
         "Grape healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular vineyard maintenance."
+          treatment: "- Continue regular vineyard maintenance.",
         },
 
         // Orange Diseases
         "Orange Haunglongbing (Citrus greening)": {
           disease: "Citrus greening",
           status: "Diseased",
-          treatment: "- Remove infected trees.\n- Control insect vectors (psyllids).\n- Use disease-free nursery stock.\n- Apply systemic insecticides."
+          treatment:
+            "- Remove infected trees.\n- Control insect vectors (psyllids).\n- Use disease-free nursery stock.\n- Apply systemic insecticides.",
         },
 
         // Peach Diseases
         "Peach Bacterial spot": {
           disease: "Bacterial spot",
           status: "Diseased",
-          treatment: "- Apply copper-based bactericides.\n- Prune to improve air circulation.\n- Use resistant varieties.\n- Avoid overhead irrigation."
+          treatment:
+            "- Apply copper-based bactericides.\n- Prune to improve air circulation.\n- Use resistant varieties.\n- Avoid overhead irrigation.",
         },
         "Peach healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular orchard maintenance."
+          treatment: "- Continue regular orchard maintenance.",
         },
 
         // Pepper Diseases
         "Pepper, bell Bacterial spot": {
           disease: "Bacterial spot",
           status: "Diseased",
-          treatment: "- Use copper-based bactericides.\n- Practice crop rotation.\n- Remove infected plants.\n- Avoid overhead watering.\n- Use disease-free seeds."
+          treatment:
+            "- Use copper-based bactericides.\n- Practice crop rotation.\n- Remove infected plants.\n- Avoid overhead watering.\n- Use disease-free seeds.",
         },
         "Pepper, bell healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular garden maintenance."
+          treatment: "- Continue regular garden maintenance.",
         },
 
         // Potato Diseases
         "Potato Early blight": {
           disease: "Early blight",
           status: "Diseased",
-          treatment: "- Apply fungicides containing chlorothalonil.\n- Remove infected leaves.\n- Practice crop rotation.\n- Use disease-free seed potatoes."
+          treatment:
+            "- Apply fungicides containing chlorothalonil.\n- Remove infected leaves.\n- Practice crop rotation.\n- Use disease-free seed potatoes.",
         },
         "Potato Late blight": {
           disease: "Late blight",
           status: "Diseased",
-          treatment: "- Apply copper-based fungicides.\n- Remove and destroy infected plants immediately.\n- Avoid overhead irrigation.\n- Use resistant varieties."
+          treatment:
+            "- Apply copper-based fungicides.\n- Remove and destroy infected plants immediately.\n- Avoid overhead irrigation.\n- Use resistant varieties.",
         },
         "Potato healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular crop management."
+          treatment: "- Continue regular crop management.",
         },
 
         // Raspberry
         "Raspberry healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Maintain proper pruning and fertilization."
+          treatment: "- Maintain proper pruning and fertilization.",
         },
 
         // Soybean
         "Soybean healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue standard crop management practices."
+          treatment: "- Continue standard crop management practices.",
         },
 
         // Squash
         "Squash Powdery mildew": {
           disease: "Powdery mildew",
           status: "Diseased",
-          treatment: "- Apply sulfur-based fungicides.\n- Improve air circulation.\n- Avoid overhead watering.\n- Plant resistant varieties."
+          treatment:
+            "- Apply sulfur-based fungicides.\n- Improve air circulation.\n- Avoid overhead watering.\n- Plant resistant varieties.",
         },
 
         // Strawberry Diseases
         "Strawberry Leaf scorch": {
           disease: "Leaf scorch",
           status: "Diseased",
-          treatment: "- Remove infected plants.\n- Apply fungicides.\n- Improve soil drainage.\n- Avoid overhead irrigation.\n- Use disease-free plants."
+          treatment:
+            "- Remove infected plants.\n- Apply fungicides.\n- Improve soil drainage.\n- Avoid overhead irrigation.\n- Use disease-free plants.",
         },
         "Strawberry healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular garden maintenance."
+          treatment: "- Continue regular garden maintenance.",
         },
 
         // Tomato Diseases
         "Tomato Bacterial spot": {
           disease: "Bacterial spot",
           status: "Diseased",
-          treatment: "- Use copper-based bactericides.\n- Practice crop rotation.\n- Remove infected plants.\n- Use disease-free seeds."
+          treatment:
+            "- Use copper-based bactericides.\n- Practice crop rotation.\n- Remove infected plants.\n- Use disease-free seeds.",
         },
         "Tomato Early blight": {
           disease: "Early blight",
           status: "Diseased",
-          treatment: "- Apply fungicides containing chlorothalonil.\n- Remove infected leaves.\n- Mulch around plants.\n- Practice crop rotation."
+          treatment:
+            "- Apply fungicides containing chlorothalonil.\n- Remove infected leaves.\n- Mulch around plants.\n- Practice crop rotation.",
         },
         "Tomato Late blight": {
           disease: "Late blight",
           status: "Diseased",
-          treatment: "- Remove infected plants immediately.\n- Apply copper-based fungicides.\n- Avoid overhead watering.\n- Use resistant varieties."
+          treatment:
+            "- Remove infected plants immediately.\n- Apply copper-based fungicides.\n- Avoid overhead watering.\n- Use resistant varieties.",
         },
         "Tomato Leaf Mold": {
           disease: "Leaf Mold",
           status: "Diseased",
-          treatment: "- Improve air circulation.\n- Avoid wet leaves.\n- Apply fungicides.\n- Remove infected leaves.\n- Use greenhouse ventilation."
+          treatment:
+            "- Improve air circulation.\n- Avoid wet leaves.\n- Apply fungicides.\n- Remove infected leaves.\n- Use greenhouse ventilation.",
         },
         "Tomato Septoria leaf spot": {
           disease: "Septoria leaf spot",
           status: "Diseased",
-          treatment: "- Remove infected leaves.\n- Apply fungicides containing chlorothalonil.\n- Mulch around plants.\n- Practice crop rotation."
+          treatment:
+            "- Remove infected leaves.\n- Apply fungicides containing chlorothalonil.\n- Mulch around plants.\n- Practice crop rotation.",
         },
         "Tomato Spider mites Two-spotted spider mite": {
           disease: "Two-spotted spider mite",
           status: "Diseased",
-          treatment: "- Use miticides.\n- Increase humidity.\n- Introduce natural predators.\n- Remove heavily infested plants."
+          treatment:
+            "- Use miticides.\n- Increase humidity.\n- Introduce natural predators.\n- Remove heavily infested plants.",
         },
         "Tomato Target Spot": {
           disease: "Target Spot",
           status: "Diseased",
-          treatment: "- Apply copper-based fungicides.\n- Remove infected leaves.\n- Practice crop rotation.\n- Ensure proper plant spacing."
+          treatment:
+            "- Apply copper-based fungicides.\n- Remove infected leaves.\n- Practice crop rotation.\n- Ensure proper plant spacing.",
         },
         "Tomato Tomato Yellow Leaf Curl Virus": {
           disease: "Yellow Leaf Curl Virus",
           status: "Diseased",
-          treatment: "- Remove infected plants.\n- Control whitefly vectors.\n- Use resistant varieties.\n- Practice field sanitation."
+          treatment:
+            "- Remove infected plants.\n- Control whitefly vectors.\n- Use resistant varieties.\n- Practice field sanitation.",
         },
         "Tomato Tomato mosaic virus": {
           disease: "Mosaic virus",
           status: "Diseased",
-          treatment: "- Remove infected plants immediately.\n- Use virus-free seeds.\n- Control insect vectors.\n- Practice strict sanitation."
+          treatment:
+            "- Remove infected plants immediately.\n- Use virus-free seeds.\n- Control insect vectors.\n- Practice strict sanitation.",
         },
         "Tomato healthy": {
           disease: "Healthy",
           status: "Healthy",
-          treatment: "- Continue regular garden maintenance."
+          treatment: "- Continue regular garden maintenance.",
         },
-        "Unknown": {
+        Unknown: {
           disease: "Unknown",
           status: "Uncertain",
-          treatment: "- Consult a local agricultural expert.\n- Take a clear, well-lit photo of the entire plant.\n- Observe and document symptoms carefully.\n- Consider professional diagnosis."
-        }
+          treatment:
+            "- Consult a local agricultural expert.\n- Take a clear, well-lit photo of the entire plant.\n- Observe and document symptoms carefully.\n- Consider professional diagnosis.",
+        },
       };
 
-
-      form.addEventListener('submit', async (event) => {
+      form.addEventListener("submit", async (event) => {
         event.preventDefault();
         const formData = new FormData(form);
 
@@ -504,19 +536,19 @@
           // Read and display uploaded image
           const file = fileInput.files[0];
           const reader = new FileReader();
-          reader.onload = function(e) {
+          reader.onload = function (e) {
             uploadedImage.src = e.target.result;
-            uploadedImage.style.display = 'block';
+            uploadedImage.style.display = "block";
           };
           reader.readAsDataURL(file);
 
-          const response = await fetch('/predict', {
-            method: 'POST',
+          const response = await fetch("/predict", {
+            method: "POST",
             body: formData,
           });
 
           if (!response.ok) {
-            throw new Error('Failed to fetch prediction');
+            throw new Error("Failed to fetch prediction");
           }
 
           const result = await response.json();
@@ -527,16 +559,15 @@
           }
 
           const confidence = result.confidence || 0;
-          const predictedClass = confidence >= 0.8 
-            ? result.predicted_class 
-            : "Unknown";
-          
-          const confidencePercentage = (confidence * 100).toFixed(2) + '%';
-          
+          const predictedClass =
+            confidence >= 0.8 ? result.predicted_class : "Unknown";
+
+          const confidencePercentage = (confidence * 100).toFixed(2) + "%";
+
           const diseaseInfo = diseaseDatabase[predictedClass] || {
             disease: "Unknown",
             status: "Uncertain",
-            treatment: "Consult a local agricultural expert"
+            treatment: "Consult a local agricultural expert",
           };
 
           predictedClassSpan.textContent = diseaseInfo.disease;
@@ -544,25 +575,25 @@
           statusSpan.textContent = diseaseInfo.status.toLowerCase();
 
           possibleDiseaseSpan.innerHTML = diseaseInfo.treatment
-            .split('. ')
-            .map(sentence => sentence.trim() + '.')
-            .join('<br>');
-          
-          resultDiv.style.display = 'block';
+            .split(". ")
+            .map((sentence) => sentence.trim() + ".")
+            .join("<br>");
+
+          resultDiv.style.display = "block";
         } catch (error) {
           alert(`Error: ${error.message}`);
         }
       });
 
-      refreshButton.addEventListener('click', () => {
-        fileInput.value = '';
-        resultDiv.style.display = 'none';
-        predictedClassSpan.textContent = '';
-        confidenceSpan.textContent = '';
-        statusSpan.textContent = '';
-        possibleDiseaseSpan.textContent = '';
-        uploadedImage.src = '';
-        uploadedImage.style.display = 'none';
+      refreshButton.addEventListener("click", () => {
+        fileInput.value = "";
+        resultDiv.style.display = "none";
+        predictedClassSpan.textContent = "";
+        confidenceSpan.textContent = "";
+        statusSpan.textContent = "";
+        possibleDiseaseSpan.textContent = "";
+        uploadedImage.src = "";
+        uploadedImage.style.display = "none";
       });
     </script>
   </body>
