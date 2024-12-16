@@ -168,17 +168,55 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        text-align: center;
         display: none;
+        width: fit-content;
+        max-width: 90%;
+      }
+
+      .result-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        width: auto;
+      }
+
+      #uploadedImage {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: contain;
+        border-radius: 8px;
+      }
+
+      .result-text {
+        width: auto;
+        text-align: left;
+      }
+
+      @media (max-width: 768px) {
+        .result-content {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        #uploadedImage {
+          max-width: 250px;
+        }
+      }
+
+      .result-text {
+        flex-grow: 1;
+        text-align: left;
       }
 
       #result h2 {
         margin-bottom: 10px;
+        text-align: left;
       }
 
       #possibleDisease {
         display: block;
         white-space: pre-wrap;
+        text-align: left;
       }
     </style>
   </head>
@@ -208,10 +246,16 @@
       <button type="submit">Predict</button>
     </form>
     <div id="result">
-      <h2>Prediction Result</h2>
-      <p><strong>Possible Disease:</strong> <span id="predictedClass"></span></p>
-      <p><strong>Status:</strong> <span id="status"></span></p>
-      <p><strong>Treatment:</strong> <span id="possibleDisease"></span></p>
+      <div class="result-content">
+        <img id="uploadedImage" src="" alt="Uploaded Image" style="display:none;" />
+        <div class="result-text">
+          <h2>Prediction Result</h2>
+          <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+          <p><strong>Possible Disease:</strong> <span id="predictedClass"></span></p>
+          <p><strong>Status:</strong> <span id="status"></span></p>
+          <p><strong>Treatment:</strong> <span id="possibleDisease"></span></p>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -219,9 +263,11 @@
       const refreshButton = document.getElementById('refreshButton');
       const resultDiv = document.getElementById('result');
       const predictedClassSpan = document.getElementById('predictedClass');
+      const confidenceSpan = document.getElementById('confidence');
       const statusSpan = document.getElementById('status');
       const possibleDiseaseSpan = document.getElementById('possibleDisease');
       const fileInput = form.querySelector('input[type="file"]');
+      const uploadedImage = document.getElementById('uploadedImage');
 
       // Database penyakit
       const diseaseDatabase = {
@@ -441,6 +487,11 @@
           disease: "Healthy",
           status: "Healthy",
           treatment: "- Continue regular garden maintenance."
+        },
+        "Unknown": {
+          disease: "Unknown",
+          status: "Uncertain",
+          treatment: "- Consult a local agricultural expert.\n- Take a clear, well-lit photo of the entire plant.\n- Observe and document symptoms carefully.\n- Consider professional diagnosis."
         }
       };
 
@@ -450,6 +501,15 @@
         const formData = new FormData(form);
 
         try {
+          // Read and display uploaded image
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            uploadedImage.src = e.target.result;
+            uploadedImage.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+
           const response = await fetch('/predict', {
             method: 'POST',
             body: formData,
@@ -466,14 +526,21 @@
             return;
           }
 
-          const predictedClass = result.predicted_class;
+          const confidence = result.confidence || 0;
+          const predictedClass = confidence >= 0.9 
+            ? result.predicted_class 
+            : "Unknown";
+          
+          const confidencePercentage = (confidence * 100).toFixed(2) + '%';
+          
           const diseaseInfo = diseaseDatabase[predictedClass] || {
             disease: "Unknown",
-            status: "Unknown",
+            status: "Uncertain",
             treatment: "Consult a local agricultural expert"
           };
 
           predictedClassSpan.textContent = diseaseInfo.disease;
+          confidenceSpan.textContent = confidencePercentage;
           statusSpan.textContent = diseaseInfo.status.toLowerCase();
 
           possibleDiseaseSpan.innerHTML = diseaseInfo.treatment
@@ -491,8 +558,11 @@
         fileInput.value = '';
         resultDiv.style.display = 'none';
         predictedClassSpan.textContent = '';
+        confidenceSpan.textContent = '';
         statusSpan.textContent = '';
         possibleDiseaseSpan.textContent = '';
+        uploadedImage.src = '';
+        uploadedImage.style.display = 'none';
       });
     </script>
   </body>
